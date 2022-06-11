@@ -1,5 +1,7 @@
 import './App.css';
 import CardList from './components/cardlist/card-list.component';
+import { useState } from 'react';
+import SearchBox from './components/search-box/search-box.components';
 
 const persons = [
   {
@@ -22,14 +24,32 @@ const persons = [
   }
 ]
 
+
 function App() {
+
+  // Initialize search field
+  const [searchField,setSearchField] = useState('')
+
+  // Filter persons based on full name, lower case and no spaces
+  const filteredPeople =persons.filter((person) =>{
+    const fullName = person.firstName + person.lastName
+    return fullName.toLowerCase().includes(searchField.replace(/\s/g, ''))
+  })
+
+// When user types in search box update state and return searchField
+  function onSearchChange(event){
+    const value = event.target.value.toLowerCase()
+    setSearchField(value)
+    return(searchField)
+  }
+
   return (
     <div>
       <div>
         <h1>Relationships</h1>
         <div>Add Relationship Button</div>
-        <div>Search Bar</div>
-        <CardList persons={persons}/>
+        <SearchBox onSearchChangeHandeler={onSearchChange} placeholder='Search'/>
+        <CardList persons={filteredPeople}/>
       </div>
       <div>
         Details Section
