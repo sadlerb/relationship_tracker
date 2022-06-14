@@ -1,0 +1,14 @@
+.app-container {
+
+    &.inactive{
+        filter: blur(5px);
+        pointer-events: none;
+        position: fixed;
+
+    }
+}
+
+
+
+
+

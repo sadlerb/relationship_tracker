@@ -1,9 +1,11 @@
-import './App.css';
+import './App.scss';
 import CardList from './components/cardlist/card-list.component';
 import { useState } from 'react';
 import SearchBox from './components/search-box/search-box.components';
+import PopUp from './components/popup/popup.components';
 
-const persons = [
+
+const personsArray = [
   {
     firstName:"John",
     lastName:"Brown",
@@ -24,8 +26,25 @@ const persons = [
   }
 ]
 
+const newPerson = {
+  firstName:"Renee",
+  lastName:"AnnaKay",
+  imgUrl:"https://via.placeholder.com/150/000000/FFFFFF/?text=ProfilePicture",
+  id:4
+}
+
+
+
 
 function App() {
+  // Handles popup
+  const [togglePopupState,changeToggleState] = useState(false)
+  function popupHandeler() {
+      changeToggleState(!togglePopupState)
+  }
+
+
+  const [persons,setPersons] = useState(personsArray)
 
   // Initialize search field
   const [searchField,setSearchField] = useState('')
@@ -36,7 +55,16 @@ function App() {
     return fullName.toLowerCase().includes(searchField.replace(/\s/g, ''))
   })
 
-// When user types in search box update state and return searchField
+  function addPerson() {
+    popupHandeler()
+    setPersons([...persons,{...newPerson}])
+   
+   
+  }
+  
+
+
+  // When user types in search box update state and return searchField
   function onSearchChange(event){
     const value = event.target.value.toLowerCase()
     setSearchField(value)
@@ -44,22 +72,26 @@ function App() {
   }
 
   return (
-    <div>
-      <div>
-        <h1>Relationships</h1>
-        <div>Add Relationship Button</div>
-        <SearchBox onSearchChangeHandeler={onSearchChange} placeholder='Search'/>
-        <CardList persons={filteredPeople}/>
-      </div>
-      <div>
-        Details Section
-        <div>
-          Person Header
-          <div>
-            Notes and Reminders
+    <div className='app'>
+      <div className={`app-container ${togglePopupState?'inactive':''}`}>
+        <div className='relationships-container'>
+          <h1>Relationships</h1>
+          <button onClick={popupHandeler}>Add Relationship Button</button>
+          <SearchBox onSearchChangeHandeler={onSearchChange} placeholder='Search'/>
+          <CardList persons={filteredPeople}/>
+        </div>
+        <div className='details-container'>
+          Details Section
+          <div className='details-card'>
+            Detials Card
+            <div>
+              Person
+              Notes and Reminders
+            </div>
           </div>
         </div>
       </div>
+      {togglePopupState && <PopUp closeHandeler={popupHandeler} addPersonHandeler={addPerson} />}
     </div>
   );
 }
