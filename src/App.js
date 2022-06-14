@@ -57,7 +57,7 @@ function App() {
 
   function addPerson() {
     popupHandeler()
-    setPersons([...persons,{...newPerson}])
+    // handle Adding a new person to the list
    
    
   }
